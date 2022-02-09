@@ -26,14 +26,25 @@ public class MainActivity extends AppCompatActivity {
 
     Random bolita = new Random();
     int bolaLanzada=0;
+    ArrayList<Integer> carton = new ArrayList<>();
+    Random aleatorio = new Random();
+    int posicion=0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        for (int i = 0; i<20; i++){
+            casilla = aleatorio.nextInt(99);
+            carton.add(casilla);
+        }
+        Log.d("Casilla", carton.toString());
+
         crearBingo();
 
         final Handler handler = new Handler();
-        final int tiempoEspera = 3000; // milisegundos
+        final int tiempoEspera = 6000; // milisegundos
 
         handler.postDelayed(new Runnable() {
             public void run() {
@@ -57,6 +68,10 @@ public class MainActivity extends AppCompatActivity {
         textViewBola.setText("Salió el " + bolaLanzada);
     }
 
+
+    int casilla;
+
+
     public void crearBingo() {
 
         Display display = getWindowManager().getDefaultDisplay();
@@ -79,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         GridLayout.LayoutParams param = new GridLayout.LayoutParams();
-        param.setMargins(10, 0, 0, 0);
+        param.setMargins(10, 0, 0, 20);
         param.height = ViewGroup.LayoutParams.MATCH_PARENT;
         param.width = ViewGroup.LayoutParams.MATCH_PARENT;
 
@@ -88,22 +103,24 @@ public class MainActivity extends AppCompatActivity {
 
 
         LinearLayout.LayoutParams layoutParams = new
-                LinearLayout.LayoutParams(width / 5, (height / 6));
-        layoutParams.setMargins(0, 0, 0, 0);
+                LinearLayout.LayoutParams(width / 5, (height / 6)-40);
+        layoutParams.setMargins(0, 0, 0, 20);
 
 TextView[][] textView = null;
-Random aleatorio = new Random();
 
-        for(int i = 0; i < 6 ; i++) {
-            for (int j = 0; j < 5 ; j++) {
-                    textView =  new TextView[6][5];
+
+
+
+
+        for(int i = 0; i < 5 ; i++) {
+
+            for (int j = 0; j < 4 ; j++) {
+                    textView =  new TextView[5][4];
                     TextView textView1 = new TextView(this);
                     textView1.setLayoutParams(layoutParams);
-                    ArrayList<Integer> carton = new ArrayList<>(20);
 
-                    
-
-                    textView1.setText(String.valueOf(aleatorio.nextInt(99)));
+                    textView1.setText(String.valueOf(carton.get(posicion)));
+                  //  textView1.setText(String.valueOf(aleatorio.nextInt(99)));
                     textView1.setBackgroundColor(Color.WHITE);
                     textView1.setTextColor(Color.GRAY);
                     textView[i][j] = textView1;
@@ -112,9 +129,7 @@ Random aleatorio = new Random();
                     textView[i][j].setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            TextView b = (TextView) view;
                             if (textView1.getText().equals(String.valueOf(bolaLanzada))){
-                                b.setBackgroundColor(Color.BLACK);
                                 textView1.setBackgroundColor(Color.BLACK);
                             } else {
                                 perderPartid();
@@ -122,10 +137,10 @@ Random aleatorio = new Random();
 
                         }
                     });
-
-
                     g.addView(textView[i][j]);
-                }
+                posicion++;
+
+            }
 
             }
 
